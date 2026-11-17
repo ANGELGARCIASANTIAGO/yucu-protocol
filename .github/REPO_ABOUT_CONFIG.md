@@ -22,7 +22,7 @@ To update the **About** section on [github.com/Open-Hub-Tec/yucu](https://github
 
 #### 2. Website
 ```text
-https://ais-pre-oz33zstal3h64mvd2dn5ng-283290758794.us-east1.run.app
+https://yucu-protocol.vercel.app
 ```
 
 ---
