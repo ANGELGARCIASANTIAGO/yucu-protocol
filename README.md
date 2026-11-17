@@ -8,12 +8,16 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](./LICENSE)
 [![Network: Stellar testnet](https://img.shields.io/badge/Stellar-testnet%20only-black.svg?logo=stellar)](./contracts/deployments/testnet.json)
 [![Status: prototype](https://img.shields.io/badge/status-prototype-orange.svg)](#implementation-status)
+[![Demo: Vercel](https://img.shields.io/badge/demo-simulated%20data-black.svg?logo=vercel)](https://yucu-protocol.vercel.app)
+[![Drips: Stellar Wave](https://img.shields.io/badge/Drips-Stellar%20Wave-1D76DB.svg)](https://www.drips.network/wave/stellar)
 
 [What it is](#what-yucu-is) · [Principles](#design-principles) · [Voice and text](#from-voice-to-a-signed-attestation) · [How it works](#how-it-works) · [Architecture](#architecture) · [Status](#implementation-status) · [Roadmap](#roadmap) · [Quickstart](#quickstart) · [Contributing](#contributing) · [Docs](#documentation)
 
 </div>
 
 > **Prototype.** Yucu runs on Stellar **testnet** only. The contracts have not been audited, no fees are charged, and several modules are still simulated. The [status table](#implementation-status) says exactly what is real.
+>
+> **Demo:** [yucu-protocol.vercel.app](https://yucu-protocol.vercel.app), with invented data only. The server (`/api`) is not deployed yet ([#170](https://github.com/Open-Hub-Tec/yucu-protocol/issues/170)), so AI features do not answer there. Every pull request gets its own preview link.
 
 **At a glance (November 2026)**
 
@@ -270,7 +274,7 @@ Yucu is built by TecNM Tlaxiaco students as part of their courses, and some issu
 * **Module issues** (`[W…]`, with a `modulo: …` label) are taken by student teams, one module per team; see [#152](https://github.com/Open-Hub-Tec/yucu-protocol/issues/152).
 * **Course deliverables** (label `tecnm-sprint-4`) are reserved for the assigned team.
 * **Open issues** (label `open-to-all`) can be taken by anyone, after the maintainer assigns them.
-* Issues labeled `drips-eligible` may be recognized through [Drips Wave](https://www.drips.network/wave) when the repository is part of an active Wave. There is no guaranteed reward.
+* Yucu is part of the [Drips Stellar Wave](https://www.drips.network/wave/stellar). Issues labeled `Stellar Wave` are in the current Wave: apply in the Drips app, not only with a GitHub comment ([how to apply](./CONTRIBUTING.md#applying-through-drips-wave)). Issues labeled `drips-eligible` can be added to a later Wave. There is no guaranteed reward.
 
 1. Read [`AGENTS.md`](./AGENTS.md) (it applies to people and AI assistants alike), [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the ADRs the issue mentions.
 2. Ask to be assigned **before** you start; one person or team per issue.
