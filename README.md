@@ -284,7 +284,7 @@ Yucu is built by TecNM Tlaxiaco students as part of their courses, and some issu
 
 **Privacy and security.** Never commit names of interviewed people, phone numbers, addresses, keys (`S…`) or API keys. Audio, video, photos of people and PDFs do not go into `docs/research/`, `docs/ux-testing/` or `public/videos/` (CI rejects them). See [`PRIVACIDAD.md`](./docs/research/PRIVACIDAD.md). Report vulnerabilities privately as described in [`SECURITY.md`](./SECURITY.md). Everyone follows the [Code of conduct](./CODE_OF_CONDUCT.md).
 
-**AI assistants.** The repository is configured for the [Stellar Raven](https://raven.stellar.buzz/mcp) MCP server ([`mcp.json`](./mcp.json)). AI-generated code is welcome only when it is tested and the contributor understands it.
+**AI assistants.** The repository is configured for the [Stellar Raven](https://raven.stellar.buzz/mcp) MCP server: [`.mcp.json`](./.mcp.json) for Claude Code and [`.cursor/mcp.json`](./.cursor/mcp.json) for Cursor. Raven asks each person to sign in: in Claude Code, run `/mcp`, choose `stellar-raven` and then *Authenticate*. No token goes in the repository. AI-generated code is welcome only when it is tested and the contributor understands it.
 
 ---
 
