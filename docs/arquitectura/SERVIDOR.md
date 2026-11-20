@@ -1,5 +1,4 @@
 # Guía del servidor
-# Guía del servidor
 
 > **English summary.**
 >
