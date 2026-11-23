@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { PROTOCOL_FEES } from '../config/protocolFees';
 import { ScreenView, BotCardData, BotCardType, DigitalPassportLot, OrderReceipt } from '../types';
 import { BotCardView } from './BotCardView';
 import { KnowledgeBaseModal } from './KnowledgeBaseModal';
@@ -133,7 +134,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         { id: 1, title: '🌾 Registrar Cosecha o Artesanía', subtitle: 'Café, textil, miel, palma, etc.', icon: 'add_circle', action: 'registrar_lote' },
         { id: 2, title: '📸 Evaluar Muestra con Foto', subtitle: 'Revisión de calidad con apoyo del Tec', icon: 'photo_camera', action: 'evaluar_foto' },
         { id: 3, title: '💰 Consultar Mis Pagos y Saldo', subtitle: 'Billetera comunitaria y retiros', icon: 'payments', action: 'ver_pagos' },
-        { id: 4, title: '📜 Ver Dictamen Oficial Stellar', subtitle: 'Certificado sellado en blockchain', icon: 'verified', action: 'ver_dictamen' }
+        { id: 4, title: '📜 Ver Dictamen de Demostración Stellar', subtitle: 'Certificado sellado en blockchain', icon: 'verified', action: 'ver_dictamen' }
       ]
     }
   ]);
@@ -188,7 +189,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         time: 'Ahora',
         card: {
           type: 'recibo_ticket',
-          title: `Comprobante Oficial #${lastOrderReceipt.id}`,
+          title: `Comprobante de Demostración #${lastOrderReceipt.id}`,
           data: {
             ...lastOrderReceipt,
             summary: lastOrderReceipt.items.map((it) => `${it.quantity}x ${it.title}`).join(', ')
@@ -256,7 +257,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             location: 'Tlaxiaco, Oaxaca',
             summary: initialCustomMessage.replace('Confirmación de pedido directo: ', ''),
             total: 480,
-            paymentMethod: 'Trato Directo (0% Comisión)',
+            paymentMethod: 'Trato Directo (sin comisión)',
             stellarTxLedger: 52499210
           }
         },
@@ -863,7 +864,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       clean.includes('reventa')
     ) {
       const reply =
-        '🎤 Instrucción de voz ejecutada: Consultando contrato Soroban del 10% de regalías para creadoras...';
+        `🎤 Instrucción de voz ejecutada: Consultando contrato Soroban del ${PROTOCOL_FEES.artisanResaleRoyaltyPct}% de regalías para creadoras...`;
       dispatchSimulatedBotReply(
         '💎 Agente de Regalías',
         reply,
@@ -1077,7 +1078,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       photoTitle = 'Muestra de Miel Pura de Abeja de la Mixteca';
       analysisAgent = '🍯 Agente Apícola y Agroecológico Tec';
       analysisText =
-        '🍯 Verificación de Producto IA completada:\n\n• ¡Atención paisano! Esta fotografía NO corresponde a café; se identifica con 99% de certeza como Miel de Abeja 100% pura en frasco.\n• Pureza y densidad: Excelente consistencia ámbar, sin adulteración ni separación de fases.\n• Humedad estimada: 18.2% (Cumple Norma Oficial Mexicana de Miel NMX-F-036).\n• Recomendación: Para café, sube una foto de grano pergamino o cereza. Para comercializar esta miel con precio justo comunal, la vinculamos a la Vitrina Apícola:';
+        '🍯 Verificación de Producto IA completada:\n\n• ¡Atención paisano! Esta fotografía NO corresponde a café; se identifica con 99% de certeza como Miel de Abeja 100% pura en frasco.\n• Pureza y densidad: Excelente consistencia ámbar, sin adulteración ni separación de fases.\n• Humedad estimada: 18.2% (Cumple norma de referencia mexicana de Miel NMX-F-036).\n• Recomendación: Para café, sube una foto de grano pergamino o cereza. Para comercializar esta miel con precio justo comunal, la vinculamos a la Vitrina Apícola:';
       cardType = 'producto_vitrina';
     } else {
       photoUrl = 'https://images.unsplash.com/photo-1524350876685-274059332603?w=600&auto=format&fit=crop&q=80';
@@ -1295,7 +1296,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     } else if (type === 'regalias_mercado') {
       agentTag = '💎 Agente de Regalías';
       botText =
-        'Mecanismo de protección y regalías on-chain: 10% de cada reventa en galerías o el extranjero se liquida directamente a la artesana:';
+        `Mecanismo de protección y regalías on-chain: ${PROTOCOL_FEES.artisanResaleRoyaltyPct}% de cada reventa en galerías o el extranjero se liquida directamente a la artesana:`;
     } else {
       agentTag = '🤖 Orquestador Multiagente';
       botText =
@@ -1411,7 +1412,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     if (isOutOfDomain) {
       dispatchSimulatedBotReply(
         defaultAgentLabel,
-        'Disculpe paisano, como asistente oficial de Yucu en la Mixteca, únicamente puedo orientarle sobre temas de la plataforma: registro de cosechas, evaluación con foto, trazabilidad en Stellar, pagos comunitarios y asesoría técnica para la región. ¿En qué podemos apoyarle respecto a su café o producción agrícola?',
+        'Disculpe paisano, como asistente de Yucu en la Mixteca, únicamente puedo orientarle sobre temas de la plataforma: registro de cosechas, evaluación con foto, trazabilidad en Stellar, pagos comunitarios y asesoría técnica para la región. ¿En qué podemos apoyarle respecto a su café o producción agrícola?',
         undefined,
         [
           { id: 1, title: '📸 Evaluar Cosecha con Foto', subtitle: 'Revisar café o muestra', icon: 'photo_camera', action: 'evaluar_foto' },
@@ -1473,7 +1474,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     ) {
       dispatchSimulatedBotReply(
         '🌱 Compañero Yucu (TecNM)',
-        '¡Con mucho gusto, paisano! La plataforma Yucu fue creada junto al Tec de Tlaxiaco para que las familias de la Mixteca reciban un trato y pago justo por su trabajo sin intermediarios ni abusos.\n\nAquí puedes realizar 4 tareas muy sencillas con un solo toque:\n\n1. 📸 Evaluar cosecha o artesanía con foto: Revisión de calidad y humedad en 3 segundos con apoyo técnico del Tec.\n2. 💰 Ver y cobrar tus pagos: El dinero de tus ventas se resguarda en tu billetera y puedes cobrarlo en efectivo en Tlaxiaco.\n3. 🏷️ Pasaporte y Sello Digital: Tu trabajo recibe un sello oficial verificado para vender a mejor precio a clientes directos.\n4. 🚚 Transporte seguro: Rutas acordadas con transportistas de la región para mover tu producto desde tu comunidad.',
+        '¡Con mucho gusto, paisano! La plataforma Yucu fue creada junto al Tec de Tlaxiaco para que las familias de la Mixteca reciban un trato y pago justo por su trabajo sin intermediarios ni abusos.\n\nAquí puedes realizar 4 tareas muy sencillas con un solo toque:\n\n1. 📸 Evaluar cosecha o artesanía con foto: Revisión de calidad y humedad en 3 segundos con apoyo técnico del Tec.\n2. 💰 Ver y cobrar tus pagos: El dinero de tus ventas se resguarda en tu billetera y puedes cobrarlo en efectivo en Tlaxiaco.\n3. 🏷️ Pasaporte y Sello Digital: Tu trabajo recibe un sello digital verificado para vender a mejor precio a clientes directos.\n4. 🚚 Transporte seguro: Rutas acordadas con transportistas de la región para mover tu producto desde tu comunidad.',
         undefined,
         [
           { id: 1, title: '📦 Registrar Cosecha o Producto', subtitle: 'Café, miel o artesanías', icon: 'add_box', action: 'registrar_cafe' },
@@ -1498,7 +1499,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         { type: 'dictamen_stellar' },
         [
           { id: 1, title: '📸 Abrir Cámara y Evaluar', subtitle: 'Tomar foto de muestra de campo', icon: 'photo_camera', action: 'evaluar_foto' },
-          { id: 2, title: '📜 Consultar Dictamen Oficial', subtitle: 'Ver parámetros de la norma', icon: 'verified', action: 'ver_dictamen' }
+          { id: 2, title: '📜 Consultar Dictamen de Demostración', subtitle: 'Ver parámetros de la norma', icon: 'verified', action: 'ver_dictamen' }
         ],
         800
       );
@@ -1555,7 +1556,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         'Consultando la red Stellar Testnet...\n\n✅ Hash verificado en bloque #52,491,802. Datos de humedad (11.4%) y cero broca sellados sin intermediarios:',
         { type: 'dictamen_stellar' },
         [
-          { id: 1, title: '📜 Ver Dictamen Oficial', subtitle: 'Certificado del TecNM', icon: 'verified', action: 'ver_dictamen' }
+          { id: 1, title: '📜 Ver Dictamen de Demostración', subtitle: 'Certificado del TecNM', icon: 'verified', action: 'ver_dictamen' }
         ],
         800
       );
@@ -1570,7 +1571,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     ) {
       dispatchSimulatedBotReply(
         '☕ Agente Agrónomo IA',
-        'Aquí tienes el resumen de tu cosecha registrada en San Mateo Peñasco con folio oficial #884:',
+        'Aquí tienes el resumen de tu cosecha registrada en San Mateo Peñasco con folio de demostración #884:',
         { type: 'lote_registro' },
         [
           { id: 1, title: '📦 Registrar Nueva Cosecha', subtitle: 'Paso a paso guiado', icon: 'add_box', action: 'registrar_lote' },
@@ -2355,7 +2356,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
                 className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-950 font-bold text-left border border-rose-200 flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <span className="text-[16px]">💎</span>
-                <span>10% Regalías Soroban</span>
+                <span>{`${PROTOCOL_FEES.artisanResaleRoyaltyPct}% Regalías Soroban`}</span>
               </button>
               <button
                 type="button"
