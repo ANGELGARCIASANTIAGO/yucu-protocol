@@ -11,7 +11,7 @@ export const KnowledgeBaseModal: React.FC<KnowledgeBaseModalProps> = ({
   onClose,
   onOpenCard
 }) => {
-  const [activeTab, setActiveTab] = useState<'vision' | 'logistica' | 'regalias' | 'micopay' | 'becas' | 'markdown'>('vision');
+  const [activeTab, setActiveTab] = useState<'vision' | 'logistica' | 'regalias' | 'micopay' | 'estudiantes' | 'markdown'>('vision');
   const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
@@ -29,7 +29,7 @@ Combina:
 3. **Trato y Entrega Directa (Deslinde Logístico)**: Yucu no opera paqueterías ni fletes. La entrega física se acuerda directamente entre comprador y artesano en taller o parcela, eliminando al intermediario especulador.
 4. **Regalías Perpetuas On-Chain**: Smart contracts en Soroban que garantizan un 10% perpetuo a las artesanas y creadores sobre cualquier reventa secundaria en galerías o el extranjero.
 5. **MicoPay & Billetera Comunitaria**: Custodia en Escrow con USDC, cobros con código QR y red de liquidación en efectivo sin intermediación bancaria tradicional.
-6. **Sostenibilidad Académica**: Micro-becas y residencias para estudiantes de ingeniería del Tec de Tlaxiaco por resolver Issues en GitHub.
+6. **Estudiantes TecNM**: Estudiantes del TecNM Campus Tlaxiaco programan Yucu como parte de sus materias.
 
 ---
 
@@ -58,8 +58,8 @@ Combina:
 ---
 
 ## 5. VINCULACIÓN ACADÉMICA Y PARTICIPACIÓN ESTUDIANTIL
-- El fondo de desarrollo del proyecto Open Hub vincula a estudiantes de ingeniería con tareas reales de software.
-- Cada estudiante del TecNM Tlaxiaco que programa módulos, valida sensores o asiste a productores recibe micro-becas y créditos de residencia profesional al resolver issues en GitHub.
+- Estudiantes del TecNM Campus Tlaxiaco programan Yucu como parte de sus materias.
+- Si una issue forma parte de Drips Wave, Drips le paga directamente a quien la resolvió.
 `;
 
   const handleCopyMarkdown = () => {
@@ -156,14 +156,14 @@ Combina:
           </button>
           <button
             type="button"
-            onClick={() => setActiveTab('becas')}
+            onClick={() => setActiveTab('estudiantes')}
             className={`px-3 py-1.5 rounded-xl text-[12px] font-bold shrink-0 transition-all cursor-pointer ${
-              activeTab === 'becas'
+              activeTab === 'estudiantes'
                 ? 'bg-purple-900 text-white shadow-xs'
                 : 'text-[#424843] hover:bg-[#e4e1d9]'
             }`}
           >
-            🎓 Becas &amp; TecNM
+            🎓 Estudiantes TecNM
           </button>
           <button
             type="button"
@@ -329,17 +329,17 @@ Combina:
             </div>
           )}
 
-          {activeTab === 'becas' && (
+          {activeTab === 'estudiantes' && (
             <div className="space-y-3">
               <div className="bg-purple-50 border border-purple-200 rounded-2xl p-3.5">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[20px]">🎓</span>
                   <h4 className="font-extrabold text-purple-950 text-[14px]">
-                    Sostenibilidad Académica &amp; GitHub Open Hub
+                    Estudiantes TecNM &amp; GitHub Open Hub
                   </h4>
                 </div>
                 <p className="text-purple-900 text-[12.5px]">
-                  Para garantizar que el software viva por décadas en la comunidad, los estudiantes de ingeniería reciben micro-becas y residencias por contribución directa.
+                  Estudiantes del TecNM Campus Tlaxiaco programan Yucu como parte de sus materias. Si una issue forma parte de Drips Wave, Drips le paga directamente a quien la resolvió.
                 </p>
               </div>
 
@@ -347,10 +347,6 @@ Combina:
                 <p className="text-[#424843]">
                   Los estudiantes de Ingeniería en Sistemas e Informática del Instituto Tecnológico de Tlaxiaco resuelven tareas de mantenimiento, conexión de sensores IoT o soporte a campesinos.
                 </p>
-                <div className="p-2.5 bg-[#f0eee8] rounded-xl flex items-center justify-between font-mono text-[11px]">
-                  <span>GitHub Issue Resuelto #42</span>
-                  <span className="text-emerald-700 font-bold font-sans">Beca: 120 USDC · Residencia</span>
-                </div>
               </div>
             </div>
           )}

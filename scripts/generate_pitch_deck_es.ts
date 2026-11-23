@@ -1703,7 +1703,7 @@ const C_CARD_BORDER = 'E5E7EB';// Borde Suave
         { role: 'Rust / Soroban & Escrow:', name: 'Integración Trustless Work Escrow & LotPassport' },
         { role: 'Frontend & PWA Offline:', name: 'React 19, IndexedDB Outbox y Modo Abuelo 112px' },
         { role: 'Oráculos de IA Multimodales:', name: 'Normalización Tu’un Savi, Calidad SCAA y Satélite EUDR' },
-        { role: 'Gobernanza & Drips Splits:', name: 'Open Hub TecNM – 100% Código Abierto con Licencia MIT' }
+        { role: 'Gobernanza:', name: 'Open Hub TecNM – 100% Código Abierto con Licencia MIT' }
       ]
     }
   ];

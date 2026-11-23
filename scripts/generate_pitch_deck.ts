@@ -1727,7 +1727,7 @@ const C_CARD_BORDER = 'E5E7EB';// Card Border
         { role: 'Rust / Soroban & Escrow:', name: 'Trustless Work Escrow Adapter & LotPassport' },
         { role: 'Frontend & Offline PWA:', name: 'React 19, IndexedDB Outbox & 112px Elder Mode' },
         { role: 'Autonomous AI Oracles:', name: 'Tu’un Savi Voice STT, SCAA Quality & EUDR Geofence' },
-        { role: 'Governance & Drips Splits:', name: 'Open Hub TecNM – 100% MIT Open Source Public Good' }
+        { role: 'Governance:', name: 'Open Hub TecNM – 100% MIT Open Source Public Good' }
       ]
     }
   ];
