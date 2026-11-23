@@ -21,8 +21,10 @@ import type {
   LotRegistryPort,
   PayoutPort,
 } from './ports';
+import { FreighterWallet, type FreighterApi } from './wallet/FreighterWallet';
 
 export * from './ports';
+export * from './wallet';
 
 export interface Chain {
   wallets: {
@@ -52,3 +54,20 @@ export const chain: Chain = {
   attestations: new SimulatedAttestations(),
   payout: new SimulatedPayout(),
 };
+
+/**
+ * Permite elegir la billetera del comprador para el flujo de compra (#115).
+ * Por ejemplo: setBuyerWallet(new FreighterWallet()).
+ */
+export function setBuyerWallet(wallet: ExternalWalletPort): void {
+  chain.wallets.external = wallet;
+}
+
+/**
+ * Activa Freighter como la billetera externa del comprador (#115).
+ */
+export function useFreighterBuyerWallet(api?: FreighterApi): FreighterWallet {
+  const wallet = new FreighterWallet(api);
+  chain.wallets.external = wallet;
+  return wallet;
+}
