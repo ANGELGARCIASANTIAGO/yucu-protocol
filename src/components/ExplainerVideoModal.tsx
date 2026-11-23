@@ -44,16 +44,16 @@ const CHAPTERS: Chapter[] = [
   {
     id: 'openhub',
     title: '2. Open Hub TecNM',
-    badge: 'Innovación & Becas',
+    badge: 'Estudiantes TecNM',
     durationSec: 20,
     icon: 'hub',
     color: '#0e7490',
     headline: 'Open Hub: El Centro de Innovación Abierta de Tlaxiaco',
     narration:
-      'Open Hub es el nodo de desarrollo tecnológico y vinculación académica del Tec de Tlaxiaco. Aquí los estudiantes de ingeniería programan módulos, validan contratos inteligentes y auditan fricción en campo, recibiendo reconocimientos y micro-becas de residencia al resolver tareas abiertas en GitHub.',
+      'Open Hub es el nodo de desarrollo tecnológico y vinculación académica del Tec de Tlaxiaco. Aquí los estudiantes de ingeniería programan módulos, validan contratos inteligentes y auditan fricción en campo como parte de sus materias. Si una issue forma parte de Drips Wave, Drips le paga directamente a quien la resolvió.',
     highlights: [
       'Nodo de investigación y desarrollo de software comunitario',
-      'Micro-becas y residencias a estudiantes por código y soporte en GitHub',
+      'Estudiantes del TecNM Campus Tlaxiaco programan Yucu como parte de sus materias',
       'Auditorías de usabilidad con adultos mayores (tejedoras de Xochixtlán y Mixtepec, productor de café)'
     ],
     visualTag: '🏫 TecNM Campus Tlaxiaco',
