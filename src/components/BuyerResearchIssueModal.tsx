@@ -58,7 +58,7 @@ export const BuyerResearchIssueModal: React.FC<BuyerResearchIssueModalProps> = (
         willingnessToPayExtraMxn: 150,
         susScore: 95,
         consentForFutureContact: true,
-        notes: 'Desea entrega directa en su cafetería cuando inicie la cosecha oficial certificada.',
+        notes: 'Desea entrega directa en su cafetería cuando inicie la cosecha de la temporada.',
         createdVia: 'field_interview'
       },
       {
@@ -282,7 +282,7 @@ Technical engineering tasks identified for upcoming Pull Requests in the reposit
   // SPANISH OFFICIAL TEMPLATE
   const rawSpanishTemplate = `---
 name: 🛍️ Entrevista a Compradores y Evaluación de Usabilidad UX
-about: Plantilla oficial para que los estudiantes del TecNM registren entrevistas de validación con compradores y pruebas de usabilidad del Pasaporte Digital Yucu
+about: Plantilla del proyecto para que los estudiantes del TecNM registren entrevistas de validación con compradores y pruebas de usabilidad del Pasaporte Digital Yucu
 title: "[UX-RESEARCH]: Entrevista a Comprador y Prueba de Usabilidad - [Perfil/Ubicación]"
 labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluation"]
 assignees: ''
@@ -692,7 +692,7 @@ labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluatio
                       Captura en Campo para Estudiantes del TecNM
                     </h4>
                     <p className="text-xs text-amber-900/90 mt-0.5 leading-relaxed">
-                      Al entrevistar a un comprador en Tlaxiaco o en la Mixteca, registra su <strong>teléfono celular / WhatsApp</strong> y su autorización para contactarlo cuando el proyecto esté listo. Esto valida la intención real de compra y genera la lista de espera oficial.
+                      Al entrevistar a un comprador en Tlaxiaco o en la Mixteca, registra su <strong>teléfono celular / WhatsApp</strong> y su autorización para contactarlo cuando el proyecto esté listo. Esto valida la intención real de compra y genera la lista de espera.
                     </p>
                   </div>
                 </div>
@@ -902,7 +902,7 @@ labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluatio
                     />
                     <div className="text-xs text-emerald-950">
                       <strong className="block font-black text-emerald-900">
-                        ✅ Consentimiento Ético de Contacto al Lanzamiento Oficial:
+                        ✅ Consentimiento Ético de Contacto al lanzamiento:
                       </strong>
                       <span>
                         El comprador autoriza guardar su número telefónico / WhatsApp para ser contactado en el futuro una vez que el proyecto esté listo y las artesanas reciban pedidos y entregas de producción.
@@ -919,7 +919,7 @@ labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluatio
                   <textarea
                     rows={2}
                     className="w-full px-3 py-2 text-xs rounded-xl border border-stone-300 focus:border-emerald-700 outline-none"
-                    placeholder="Ej. 'Me encanta poder hablar directo por WhatsApp con la artesana sin que una aplicación intermediaria le quite el 30% de su trabajo...'"
+                    placeholder="Ej. 'Me encanta poder hablar directo por WhatsApp con la artesana sin que una aplicación intermediaria le quite una parte de su trabajo...'"
                     value={buyerQuote}
                     onChange={(e) => setBuyerQuote(e.target.value)}
                   />
@@ -1054,7 +1054,7 @@ labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluatio
                           {/* Botón WhatsApp directo */}
                           <a
                             href={`https://api.whatsapp.com/send?phone=${lead.buyerPhone.replace(/[^0-9]/g, '')}&text=${encodeURIComponent(
-                              `Hola ${lead.buyerName}, te saludamos de la brigada de validación de Yucu (TecNM Tlaxiaco). Respecto a tu interés en: ${lead.interestedProducts}, te guardamos en nuestro directorio de preventa oficial.`
+                              `Hola ${lead.buyerName}, te saludamos de la brigada de validación de Yucu (TecNM Tlaxiaco). Respecto a tu interés en: ${lead.interestedProducts}, te guardamos en nuestro directorio de preventa.`
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1100,7 +1100,7 @@ labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluatio
                 <div className="flex items-center gap-2.5">
                   <span className="text-xl">💡</span>
                   <div>
-                    <strong>Instrucción para el Alumno:</strong> Copia esta plantilla oficial o abre directamente la nueva issue con la plantilla en GitHub:
+                    <strong>Instrucción para el Alumno:</strong> Copia esta plantilla del proyecto o abre directamente la nueva issue con la plantilla en GitHub:
                     <div className="mt-0.5">
                       <code className="bg-emerald-100 text-emerald-900 px-1 py-0.5 rounded font-mono font-bold text-xs">
                         github.com/Open-Hub-Tec/yucu/issues/new?template=buyer_interview_and_usability.md
@@ -1158,7 +1158,7 @@ labels: ["user-research", "usability-testing", "buyer-interviews", "ux-evaluatio
                     Captura del Teléfono para el Lanzamiento
                   </h5>
                   <p className="text-xs text-stone-600 leading-relaxed">
-                    Pregunta: <em>&ldquo;¿Nos autorizas guardar tu número celular para avisarte por WhatsApp en cuanto el proyecto esté listo y se puedan hacer compras oficiales?&rdquo;</em> Si acepta, regístralo en la pestaña &ldquo;Modo Campo&rdquo;.
+                    Pregunta: <em>&ldquo;¿Nos autorizas guardar tu número celular para avisarte por WhatsApp en cuanto el proyecto esté listo y se puedan hacer compras?&rdquo;</em> Si acepta, regístralo en la pestaña &ldquo;Modo Campo&rdquo;.
                   </p>
                 </div>
               </div>

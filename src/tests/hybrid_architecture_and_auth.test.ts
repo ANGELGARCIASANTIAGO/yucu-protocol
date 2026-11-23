@@ -4,6 +4,7 @@
  * 2. Motor de Identidad Soberana y Login sin Contraseñas para Yucu
  */
 
+import { PROTOCOL_FEES } from '../config/protocolFees';
 import {
   HybridSettlementOrchestrator,
   COUNTRY_CONFIGS,
@@ -41,19 +42,19 @@ async function runTests() {
   const mxConfig = HybridSettlementOrchestrator.getCountryConfig('MX');
   check(mxConfig.currencyCode === 'MXN', 'México: Moneda peso mexicano (MXN)');
   check(mxConfig.anchorProvider === 'Etherfuse', 'México: Etherfuse como ancla para SPEI y MXNe');
-  check(mxConfig.producerFeePercent === 0, 'México: Cero comisión al campesino');
+  check(mxConfig.producerFeePercent === PROTOCOL_FEES.producerFeePct, 'México: Cero comisión al campesino');
 
   // Verificación de Bolivia (Polar Stellar Anchor)
   const boConfig = HybridSettlementOrchestrator.getCountryConfig('BO');
   check(boConfig.currencyCode === 'BOB', 'Bolivia: Moneda bolivianos (BOB)');
   check(boConfig.anchorProvider === 'Polar', 'Bolivia: Polar como ancla nativa de Stellar para QR Simple');
-  check(boConfig.producerFeePercent === 0, 'Bolivia: Cero comisión a productores de Los Yungas');
+  check(boConfig.producerFeePercent === PROTOCOL_FEES.producerFeePct, 'Bolivia: Cero comisión a productores de Los Yungas');
 
   // Verificación de Brasil (PIX Instantâneo)
   const brConfig = HybridSettlementOrchestrator.getCountryConfig('BR');
   check(brConfig.currencyCode === 'BRL', 'Brasil: Moneda Reais (BRL)');
   check(brConfig.anchorProvider === 'PIX Central', 'Brasil: PIX como riel instantáneo 24/7');
-  check(brConfig.producerFeePercent === 0, 'Brasil: Cero comisión a productores');
+  check(brConfig.producerFeePercent === PROTOCOL_FEES.producerFeePct, 'Brasil: Cero comisión a productores');
 
   // Simulación de ruteo y creación de orden transfronteriza
   const simOrderMx = HybridSettlementOrchestrator.createSettlementOrder({
