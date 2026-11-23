@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppLanguage, DigitalPassportLot, ScreenView } from '../types';
 import { PROTOCOL_FEES } from '../config/protocolFees';
 import { DemoBadge } from './DemoBadge';
+import { ExplicacionSello } from './accesibilidad/ExplicacionSello';
 
 interface DigitalPassportScreenProps {
   lot: DigitalPassportLot;
@@ -332,6 +333,9 @@ export const DigitalPassportScreen: React.FC<DigitalPassportScreenProps> = ({
           </button>
         </div>
       </div>
+
+      {/* El sello explicado: no es un trámite ni un cobro (W53 #182) */}
+      <ExplicacionSello />
 
       {/* ============================================================== */}
       {/* VISTA DEL PRODUCTOR / ARTESANO / CAMPESINO (CERO FRICCIÓN)      */}
