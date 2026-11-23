@@ -4,6 +4,9 @@ import { ScreenView, BotCardData, BotCardType, DigitalPassportLot, OrderReceipt 
 import { BotCardView } from './BotCardView';
 import { KnowledgeBaseModal } from './KnowledgeBaseModal';
 import { startAudioRecording, LiveRecorderSession } from '../utils/audioRecorder';
+import { useGrabacionVoz } from './accesibilidad/useGrabacionVoz';
+import { BotonMicrofono, PanelGrabacion } from './accesibilidad/BotonMicrofono';
+import { BotonRegresar } from './accesibilidad/BotonRegresar';
 
 interface ChatScreenProps {
   onNavigateScreen: (screen: ScreenView, productType?: string) => void;
@@ -63,8 +66,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       : ''
   );
 
-  const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [recordingSeconds, setRecordingSeconds] = useState<number>(0);
   const [audioVolume, setAudioVolume] = useState<number>(0);
   const [liveVoiceTranscript, setLiveVoiceTranscript] = useState<string>('');
   const [micError, setMicError] = useState<string | null>(null);
@@ -82,7 +83,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   const [speakingMsgText, setSpeakingMsgText] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const recordingTimerRef = useRef<any>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const directCameraInputRef = useRef<HTMLInputElement>(null);
@@ -294,21 +294,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [assistantMessages, registrationMessages, supportMessages, isBotTyping]);
-
-  // Audio recording simulation timer
-  useEffect(() => {
-    if (isRecording) {
-      setRecordingSeconds(0);
-      recordingTimerRef.current = setInterval(() => {
-        setRecordingSeconds((prev) => prev + 1);
-      }, 1000);
-    } else {
-      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
-    }
-    return () => {
-      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
-    };
-  }, [isRecording]);
 
   const togglePlayAudio = (msgId: string, mediaUrl?: string) => {
     if (playingAudioId === msgId) {
@@ -1105,7 +1090,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   };
 
   // Real Audio Recording with Web Speech API and Gemini Transcription
-  const startVoiceRecording = async () => {
+  const startVoiceRecording = async (): Promise<boolean> => {
     setMicError(null);
     setLiveVoiceTranscript('');
     try {
@@ -1115,31 +1100,28 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         lang: 'es-MX',
       });
       chatAudioSessionRef.current = session;
-      setIsRecording(true);
-      setRecordingSeconds(0);
+      return true;
     } catch (err: any) {
       console.warn('Micrófono denegado o no disponible:', err);
-      setIsRecording(false);
       setMicError(
         'El navegador no pudo acceder al micrófono. Por favor verifica que tenga permisos habilitados o escribe tu consulta abajo.'
       );
+      return false;
     }
   };
 
   const stopVoiceRecording = async () => {
     if (!chatAudioSessionRef.current) {
-      setIsRecording(false);
       return;
     }
 
-    setIsRecording(false);
     setAudioVolume(0);
 
     try {
       const result = await chatAudioSessionRef.current.stop();
       chatAudioSessionRef.current = null;
 
-      const durationSec = result.durationSeconds || Math.max(1, recordingSeconds);
+      const durationSec = Math.max(1, result.durationSeconds || 0);
       const formattedDuration = `0:${durationSec < 10 ? '0' : ''}${durationSec}`;
       const spokenText =
         (result.transcript || liveVoiceTranscript || '').trim() ||
@@ -1212,7 +1194,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       );
     } catch (e: any) {
       console.error('Error al finalizar grabación:', e);
-      setIsRecording(false);
     }
   };
 
@@ -1221,10 +1202,16 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       chatAudioSessionRef.current.cancel();
       chatAudioSessionRef.current = null;
     }
-    setIsRecording(false);
     setAudioVolume(0);
     setLiveVoiceTranscript('');
   };
+
+  // Botón de micrófono: toque y toque, o mantener y soltar; "Cancelar" no envía nada; máximo 60 s.
+  const grabacion = useGrabacionVoz({
+    onIniciar: startVoiceRecording,
+    onEnviar: stopVoiceRecording,
+    onCancelar: cancelVoiceRecording,
+  });
 
   // Sample Mixteco voice note helper
   const handleInsertSampleMixtecoAudio = () => {
@@ -1786,6 +1773,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
   return (
     <main className="w-full max-w-md mx-auto px-4 py-3 flex-1 flex flex-col justify-between pb-28">
+      <BotonRegresar onClick={() => onNavigateScreen('menu_principal')} className="self-start mb-3" />
       {/* Channel Switcher Tabs (Limpio y elegante estilo WhatsApp) */}
       <div className="flex items-center gap-1.5 bg-[#ebe8e2] p-1 rounded-full mb-3 shadow-2xs">
         <button
@@ -2442,7 +2430,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
           </button>
 
           <input
-            className="flex-1 bg-transparent border-0 focus:ring-0 text-[14px] text-[#1c1c18] placeholder:text-[#424843]/60 px-2 py-1 outline-none"
+            className="flex-1 min-w-0 bg-transparent border-0 focus:ring-0 text-[14px] text-[#1c1c18] placeholder:text-[#424843]/60 px-2 py-1 outline-none"
             placeholder={
               activeChannel === 'asistente'
                 ? 'Escribe tu mensaje o usa el micrófono...'
@@ -2456,26 +2444,8 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
           />
 
           <div className="flex items-center gap-1">
-            {/* Audio Voice Note Button */}
-            <button
-              type="button"
-              onClick={() => {
-                if (!isRecording) {
-                  startVoiceRecording();
-                } else {
-                  stopVoiceRecording();
-                }
-              }}
-              aria-label="Mensaje de voz"
-              title={isRecording ? "Detener y enviar consulta de voz" : "Grabar consulta de voz con micrófono"}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-                isRecording ? 'bg-red-600 text-white animate-pulse' : 'text-[#032517] hover:bg-[#f0eee8]'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[20px]">
-                {isRecording ? 'stop' : 'mic'}
-              </span>
-            </button>
+            {/* Botón de micrófono (W53 #182) */}
+            <BotonMicrofono grabacion={grabacion} />
 
             {/* Send text button */}
             {inputMessage.trim().length > 0 && (
@@ -2490,56 +2460,8 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
           </div>
         </form>
 
-        {/* Live Audio Recording Dock */}
-        {isRecording && (
-          <div className="mt-2 bg-[#1b3b2b] text-white p-3 rounded-2xl shadow-md border border-[#c7ebd4]/20 flex flex-col gap-2 animate-fadeIn">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping shrink-0" />
-                <span className="text-[12px] font-bold text-red-300 font-mono">
-                  0:{recordingSeconds < 10 ? '0' : ''}{recordingSeconds}
-                </span>
-                <span className="text-[11px] text-[#c7ebd4] font-semibold">
-                  🎙️ Micrófono en vivo (Español / Mixteco)
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={cancelVoiceRecording}
-                  className="px-2.5 py-1 text-[11px] bg-white/15 hover:bg-white/25 rounded-full text-white cursor-pointer transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
-                  onClick={stopVoiceRecording}
-                  className="px-3 py-1 text-[11px] font-bold bg-[#a73918] hover:bg-[#8c2d12] rounded-full text-white flex items-center gap-1 cursor-pointer shadow-xs active:scale-95"
-                >
-                  <span className="material-symbols-outlined text-[14px]">send</span>
-                  <span>Enviar</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Live Volume Level Bar */}
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Nivel:</span>
-              <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-linear-to-r from-emerald-400 via-yellow-400 to-red-400 transition-all duration-75 rounded-full"
-                  style={{ width: `${Math.max(10, audioVolume)}%` }}
-                />
-              </div>
-              <span className="text-[10px] font-mono text-emerald-200">{audioVolume}%</span>
-            </div>
-
-            {/* Live speech preview */}
-            <div className="text-[12px] text-white/90 italic bg-black/30 px-2.5 py-1.5 rounded-xl border border-white/10 truncate">
-              {liveVoiceTranscript ? `"${liveVoiceTranscript}"` : 'Habla claro frente a tu micrófono...'}
-            </div>
-          </div>
-        )}
+        {/* Mientras graba: contador, onda y "Cancelar" (W53 #182) */}
+        <PanelGrabacion grabacion={grabacion} volumen={audioVolume} textoEnVivo={liveVoiceTranscript} />
 
         {/* Microphone error toast */}
         {micError && (
