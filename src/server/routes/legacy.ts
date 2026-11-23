@@ -11,8 +11,10 @@ export const legacyRoutes = Router();
 // 1. Protocol Specification & Soroban Smart Contract Metadata
 legacyRoutes.get("/protocol/spec", (_req: Request, res: Response) => {
   res.json({
+    // Varias direcciones de contratos y oráculos de esta ficha son de ejemplo (#106).
+    source: "simulated",
     protocol: "Yucu Protocol",
-    version: "1.2.0-infrastructure-production",
+    version: "1.2.0-prototype",
     network: {
       ledger: "Stellar Network",
       vm: "Soroban (WebAssembly / Rust)",
@@ -55,96 +57,60 @@ legacyRoutes.get("/protocol/spec", (_req: Request, res: Response) => {
   });
 });
 
-// 2. Cryptographic Attestation Verification Endpoint for External Platforms
+// Ayudantes de la #106: validar el código del lote y responder errores con la forma de SERVIDOR.md (sección 4).
+// Formato del código de lote: 2 a 4 letras, guion, año de 4 dígitos, guion, 3 o 4 dígitos (por ejemplo, MX-2024-884).
+const LOT_CODE = /^[A-Z]{2,4}-\d{4}-\d{3,4}$/;
+
+/** Devuelve el código en mayúsculas si es válido; si no, null. */
+export function normalizeLotCode(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const code = value.trim().toUpperCase();
+  return LOT_CODE.test(code) ? code : null;
+}
+
+function invalidLotCode(res: Response) {
+  return res.status(400).json({
+    error: "El código del lote no es válido. Debe verse así: MX-2024-884.",
+    code: "INVALID_LOT_CODE",
+  });
+}
+
+// 2. Verificar una atestación: 501 hasta que exista la versión real.
+// Una verificación sirve solo si es real: un "verified: true" de ejemplo engaña a quien lo consuma.
+// La verificación real lee la red con AttestationPort (ADR-005); el servidor no tiene API de lectura propia.
 legacyRoutes.post("/attestations/verify", (req: Request, res: Response) => {
-  const { lotCode, dataHash, expectedSchema } = req.body || {};
-  const code = (lotCode || "MX-2024-884").toString().toUpperCase().trim();
-
-  // Deterministic cryptographic validation conforming to Yucu Canonical Hashing
-  const isValidFormat = /^([A-Z]{2,4}-\d{4}-\d{3,4})$/.test(code) || code.length > 6;
-  const verifiedDigest = dataHash || "cebc5b8975cd7752a921d743a6f192f76856da234a974b789063d8ff1129b1aa";
-
-  return res.json({
-    verified: isValidFormat,
-    lotCode: code,
-    schemaId: expectedSchema || "0x01_SCAA_SPECIALTY",
-    sorobanContract: "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
-    dataHash: verifiedDigest,
-    issuerAddress: "GCOMMUNITY_COOPERATIVE_ORACLE_TLAXIACO_7721",
-    issuerIdentity: "Comité Técnico Comunal & Laboratorio TecNM Campus Tlaxiaco",
-    verifications: {
-      cryptographicSignature: { valid: true, algorithm: "Ed25519", ledgerState: "Persistent (TTL Verified)" },
-      eudrAntiDeforestation: { compliant: true, cutoffDate: "2020-12-31", satelliteCheck: "Zero canopy loss detected" },
-      qualityCertification: { certified: true, standard: "SCAA 88.5 Puntos Especialidad (NMX-F-083)" },
-      humanConsensus: { approved: true, authority: "Asamblea Comunal Santa María Yucuhiti" }
-    },
-    escrowStatus: {
-      provider: "Trustless Work Soroban",
-      milestones: [
-        { id: 1, name: "Anticipo de Origen (30%)", status: "RELEASED", txHash: "0x8fa1...4bc2" },
-        { id: 2, name: "Entrega Física en Acopio (70%)", status: "LOCKED_AWAITING_SCAN", payoutRail: "Banxico SPEI / MicoPay" }
-      ]
-    },
-    gs1DigitalLink: `https://yucu.tecnm.mx/01/0750100000001/10/${encodeURIComponent(code)}`,
-    timestamp: new Date().toISOString()
+  if (!normalizeLotCode(req.body?.lotCode)) return invalidLotCode(res);
+  return res.status(501).json({
+    error: "La verificación de atestaciones todavía no está disponible.",
+    code: "NOT_IMPLEMENTED",
   });
 });
 
-// 3. Issue Signed Attestation (For External Certified Laboratories & Cooperatives)
+// 3. Emitir una atestación: 501.
+// El servidor nunca emite ni firma por nadie: la persona prepara, firma en su teléfono y envía (AGENTS.md, regla 1).
 legacyRoutes.post("/attestations/issue", (req: Request, res: Response) => {
-  const { lotCode, productType, qualityScore, authorityAddress } = req.body || {};
-  const code = (lotCode || `YUC-${Date.now().toString().slice(-6)}`).toString().toUpperCase();
-
-  const attestationUid = `ATT-SOROBAN-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
-
-  return res.status(201).json({
-    status: "ISSUED",
-    attestationUid,
-    lotCode: code,
-    schemaId: productType === "textile" ? "0x02_MASTER_TEXTILE_NOM" : "0x01_SCAA_SPECIALTY",
-    qualityScore: qualityScore || 89.2,
-    issuer: authorityAddress || "GCOMMUNITY_COOPERATIVE_ORACLE_TLAXIACO_7721",
-    ledgerTransaction: {
-      sorobanTxHash: `0x${Math.random().toString(16).substring(2, 66)}`,
-      ledgerSequence: 52410982,
-      feeSponsored: true,
-      sponsorAddress: "GRELAYER_TECNM_FEE_BUMP_SPONSOR_MASTER_TREASURY_0001",
-      gasChargedXLM: "0.00000"
-    },
-    resolverUrl: `https://yucu.tecnm.mx/?cert=${encodeURIComponent(code)}`,
-    issuedAt: new Date().toISOString()
+  if (!normalizeLotCode(req.body?.lotCode)) return invalidLotCode(res);
+  return res.status(501).json({
+    error: "La emisión de atestaciones todavía no está disponible.",
+    code: "NOT_IMPLEMENTED",
   });
 });
 
-// 4. Digital Twin Passport Resolver (GS1 Digital Link & W3C Verifiable Credential)
+// 4. Pasaporte del lote: datos de demostración marcados como simulados.
+// Sin "VerifiableCredential", sin firma (proof), sin hashes y sin nombres de personas.
 legacyRoutes.get("/lots/:code/passport", (req: Request, res: Response) => {
-  const code = req.params.code.toUpperCase();
-  res.json({
-    "@context": ["https://www.w3.org/2018/credentials/v1", "https://gs1.org/voc/"],
-    id: `urn:yucu:lot:${code}`,
-    type: ["VerifiableCredential", "AgriculturalProvenanceCredential"],
-    issuer: "did:stellar:GCOMMUNITY_COOPERATIVE_ORACLE_TLAXIACO_7721",
-    issuanceDate: new Date().toISOString(),
-    credentialSubject: {
-      lotCode: code,
-      producerName: "Don Eutiquio (Soberanía y Privacidad Resguardada)",
-      community: "Santa María Yucuhiti, Oaxaca",
+  const code = normalizeLotCode(req.params.code);
+  if (!code) return invalidLotCode(res);
+  return res.json({
+    source: "simulated",
+    notice: "Ejemplo de demostración. No es un pasaporte real ni está registrado en la red.",
+    lotCode: code,
+    example: {
+      community: "Mixteca Alta, Oaxaca",
       altitudeMeters: 1720,
       varieties: ["Typica", "Bourbon"],
-      process: "Lavado Tradicional Artesanal",
-      cuppingScore: 89.2,
-      eudrCompliant: true,
-      zeroDeforestationHash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      directPayoutPercentToFamily: 98,
-      communalTequioPercent: 2,
+      process: "Lavado tradicional",
     },
-    proof: {
-      type: "Ed25519Signature2020",
-      created: new Date().toISOString(),
-      verificationMethod: "did:stellar:GCOMMUNITY_COOPERATIVE_ORACLE_TLAXIACO_7721#key-1",
-      proofPurpose: "assertionMethod",
-      proofValue: "z3kF9xWpQ2M8vH...SorobanEd25519SignatureVerified"
-    }
   });
 });
 

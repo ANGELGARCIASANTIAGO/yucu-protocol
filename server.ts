@@ -220,6 +220,7 @@ function getDomainFallback(message: string): {
   agent: string;
   cardType: string | null;
   options?: { id: number; title: string; subtitle: string; icon?: string; action?: string }[];
+  source?: "simulated";
 } {
   const clean = message
     .toLowerCase()
@@ -530,14 +531,15 @@ function getDomainFallback(message: string): {
   if (clean.includes("stellar") || clean.includes("blockchain") || clean.includes("hash") || clean.includes("dictamen")) {
     return {
       reply:
-        "El Dictamen Oficial está anclado en la red Stellar Testnet en el ledger #52,491,802 con hash criptográfico inmutable que avala 11.4% de humedad, 0% broca y origen 100% de la Mixteca Oaxaqueña.",
-      agent: "⛓️ Certificación Notarial Stellar",
+        "Todavía no hay un registro real de su lote en Stellar. Lo que ve en la app es una demostración en la red de prueba. Cuando usted registre su lote, lo firmará en su celular y aquí podrá ver el registro.",
+      agent: "⛓️ Registro en Stellar (demostración)",
+      source: "simulated",
       cardType: "dictamen_stellar",
       options: [
         {
           id: 1,
-          title: "📜 Ver Dictamen Completo",
-          subtitle: "Certificado oficial del TecNM",
+          title: "📜 Ver ejemplo de registro",
+          subtitle: "Demostración: todavía no es un registro real",
           icon: "verified",
           action: "ver_dictamen",
         },
