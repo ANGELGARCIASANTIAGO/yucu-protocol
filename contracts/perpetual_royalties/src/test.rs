@@ -164,12 +164,9 @@ fn reventa_o_consulta_de_pieza_inexistente_devuelve_error() {
 fn reventa_falla_si_el_comprador_no_tiene_saldo() {
     let s = setup();
     let comprador_sin_fondos = Address::generate(&s.env);
-    let res = s.client.try_execute_secondary_sale(
-        &s.item_id,
-        &comprador_sin_fondos,
-        &s.token,
-        &10_000,
-    );
+    let res =
+        s.client
+            .try_execute_secondary_sale(&s.item_id, &comprador_sin_fondos, &s.token, &10_000);
     assert!(res.is_err());
     assert_eq!(s.client.get_item(&s.item_id).current_owner, s.artisan);
 }
